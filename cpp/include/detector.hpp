@@ -19,11 +19,11 @@ public:
     ~Detector() = default;
 
     void setClassNames(const std::vector<std::string>& names);
-    // 核心接口：输入图像，输出检测框集合
+    // 推理接口
     bool detect(cv::Mat& frame, std::vector<Detection>& output, float confThreshold = 0.25f, float iouThreshold = 0.45f);
 
 private:
-    // 预处理：Letterbox (保持比例缩放并填充)
+    // 预处理
     void preprocess(cv::Mat& image, float& scale, cv::Scalar& pad);
     
     // 推理环境成员
@@ -37,6 +37,5 @@ private:
     std::string outputName;
 
     const cv::Size modelShape = cv::Size(640, 640);
-
     std::vector<std::string> classNames;
 };

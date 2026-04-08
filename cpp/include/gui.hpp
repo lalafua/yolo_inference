@@ -28,9 +28,8 @@ private:
     // 推理引擎
     std::unique_ptr<Detector> detector;
 
-    // 辅助函数：cv::Mat 转 QImage
     QImage cvMatToQImage(const cv::Mat& mat);
-    // 绘图函数：在结果上绘制框和文字
+    // 在结果上绘制框和文字
     void drawResults(cv::Mat& img, const std::vector<Detection>& results);
 };
 

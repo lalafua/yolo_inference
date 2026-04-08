@@ -1,18 +1,16 @@
 #include "../include/detector.hpp"
-#include <vector>
 
 Detector::Detector(const std::string& modelPath, bool useGPU) {
     env = Ort::Env(ORT_LOGGING_LEVEL_WARNING, "YOLOv11_Inference");
     sessionOptions = Ort::SessionOptions();
 
-    if (useGPU) {
-        // 如果安装了 CUDA 版 ORT，可以启用 GPU
-        // OrtStatus* status = OrtSessionOptionsAppendExecutionProvider_CUDA(sessionOptions, 0);
-    }
+    // if (useGPU) {
+    //     OrtStatus* status = OrtSessionOptionsAppendExecutionProvider_CUDA(sessionOptions, 0);
+    // }
 
     session = std::make_unique<Ort::Session>(env, modelPath.c_str(), sessionOptions);
 
-    // 获取输入/输出节点信息 (YOLOv11 默认通常是 1个输入 1个输出)
+    // 获取输入/输出节点信息
     Ort::AllocatorWithDefaultOptions allocator;
     inputName = session->GetInputNameAllocated(0, allocator).get();
     outputName = session->GetOutputNameAllocated(0, allocator).get();
@@ -71,7 +69,7 @@ bool Detector::detect(cv::Mat& frame, std::vector<Detection>& output, float conf
     int rows = shape[1]; // 4 (box) + num_classes
     int anchors = shape[2]; // 8400
 
-    // 转置数据处理：YOLOv11 输出是 [1, 4+N, 8400]
+    // 转置数据处理,输出是 [1, 4+N, 8400]
     cv::Mat outputMat(rows, anchors, CV_32F, rawOutput);
     outputMat = outputMat.t(); // 变成 [8400, 84]
 
