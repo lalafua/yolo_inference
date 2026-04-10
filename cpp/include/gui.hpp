@@ -9,6 +9,7 @@
 #include <QFileDialog>
 #include <QPixmap>
 #include <QImage>
+#include <memory>
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -18,18 +19,17 @@ public:
     ~MainWindow();
 
 private slots:
-    void onUploadImage(); // 响应上传按钮
+    void onUploadImage(); 
 
 private:
     // UI 控件
     QPushButton *btnUpload;
-    QLabel *imgDisplay;
+    QLabel *leftDisplay;   // 原始图像
+    QLabel *rightDisplay;  // 标注图像
     
     // 推理引擎
     std::unique_ptr<Detector> detector;
 
     QImage cvMatToQImage(const cv::Mat& mat);
-    // 在结果上绘制框和文字
     void drawResults(cv::Mat& img, const std::vector<Detection>& results);
 };
-
